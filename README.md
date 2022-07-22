@@ -6,8 +6,17 @@ A discussion about photography and focal length lead to the idea creating a smal
 
 ## Usage
 Feed the tool with data happens on the CLI and will bring up the final result as an histogram:
-1. Start CLI tool with ```python3 focal-length-analyzer.py dir1 dir2``` where ```dir1``` and ```dir2``` are picture containing directories
+1. Start CLI tool with ```python3 focal-length-analyzer.py dir1``` where ```dir1``` is a picture containing directory
 2. Get the final result as a histogram
+3. Additional options:
+ - Compare Mode of two directories: `python3 focal-length-analyzer.py dir1 dir2`
+ - common sensor reference, choose between full frame, aps-c sensor with a specific crop factor or none. Default is full frame. Can be combined with the compare mode.
+   - `python3 focal-length-analyzer.py dir1 -s ff`
+   
+   - `python3 focal-length-analyzer.py dir1 -s aps-c1.6`
+   
+   - `python3 focal-length-analyzer.py dir1 -s none`
+ 
 
 ## Requirements
 - Python 3.9.2
