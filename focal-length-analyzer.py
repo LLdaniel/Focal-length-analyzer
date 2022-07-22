@@ -28,13 +28,17 @@ class Extractor:
                 # normal extraction
                 for img in self.images:
                         #print(self.images)
-                        self.focal_length.append( self.getExifData( Image.open(self.path + os.path.sep + img) ) )
+                        entry = self.getExifData( Image.open(self.path + os.path.sep + img) )
+                        if(entry):
+                                self.focal_length.append(entry)
                 print(self.focal_length)
                 # extraction for comparing directory
                 if(self.compareMode):
                         for img in self.compare_images:
                                 #print(self.compare_images)
-                                self.focal_length_compare.append( self.getExifData( Image.open(self.compare_path + os.path.sep + img) ) )
+                                entry = self.getExifData( Image.open(self.compare_path + os.path.sep + img) )
+                                if(entry):
+                                        self.focal_length_compare.append(entry)
                         print(self.focal_length_compare)
 
         def getCropSize(self, sensor):
@@ -67,7 +71,10 @@ class Extractor:
                 if(self.crop < 0): # local sensor without recalculation
                         return exif_data.get('FocalLength')
                 else:
-                        return exif_data.get('FocalLengthIn35mmFilm')/self.crop # case = 1 -> FF | case != 1 -> aps-c sensor
+                        if(exif_data.get('FocalLengthIn35mmFilm')):
+                                return exif_data.get('FocalLengthIn35mmFilm')/self.crop # case = 1 -> FF | case != 1 -> aps-c sensor
+                        else:
+                                return None
 
 #######################################################################################      
 class Histogram:
@@ -108,7 +115,7 @@ class Histogram:
                                 return max(self.focal_length2)
                 else:
                         return max(self.focal_length)
-                
+
         def getMinVal(self):
                 if(self.Extractor.compareMode):
                         if(min(self.focal_length) <= min(self.focal_length2) ):
@@ -162,12 +169,12 @@ if __name__ == "__main__":
                         print("Pass a valid directory with images as an argument!")
                         helpME()
                 elif( len(dirs) == 1 ):
-                        print( 'dir1 :', dirs[0])
+                        #print( 'dir1 :', dirs[0])
                         isValid = True
                         extractor = Extractor(dirs[0], None, sensor)
                 elif( len(dirs) < 3 ):
-                        print( 'dir1 :', dirs[0])
-                        print( 'dir2 :', dirs[1])
+                        #print( 'dir1 :', dirs[0])
+                        #print( 'dir2 :', dirs[1])
                         isValid = True
                         extractor = Extractor(dirs[0], dirs[1], sensor)
                 else:
