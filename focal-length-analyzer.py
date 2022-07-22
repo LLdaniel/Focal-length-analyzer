@@ -56,6 +56,7 @@ class Extractor:
                         return -1
                         
         def getExifData(self, img):
+                print(img.filename)
                 exif_data = {
                         ExifTags.TAGS[k]: v
                         for k, v in img._getexif().items()
@@ -80,7 +81,7 @@ class Histogram:
                 self.focal_length = numpy.array(self.Extractor.focal_length)
                 if(self.Extractor.compareMode):
                         self.focal_length2 = numpy.array(self.Extractor.focal_length_compare)
-                fig, axis = pyplot.subplots(figsize =(10, 5))
+                fig, axis = pyplot.subplots(figsize =(10, 5), num="Focal-length-analyzer")
                 bins = numpy.arange(self.getMinVal(), self.getMaxVal()+1, 1)
                 pyplot.title("focal length distribution (" + self.specifyTitle() + ")")
                 pyplot.xlabel("focal length [mm]")
@@ -91,9 +92,9 @@ class Histogram:
                         sum2 = len(self.Extractor.focal_length_compare)
                 pyplot.hist(self.focal_length, bins, label="collection 1 ", alpha=0.5, color='blue')
                 if(self.Extractor.compareMode):
-                        pyplot.text(self.getMaxVal()-10, 10, r'$\Sigma_1=%s,\ \Sigma_2=%s$'%(sum1,sum2))
+                        pyplot.text(self.getMaxVal()-20, 10, r'$\Sigma_1=%s,\ \Sigma_2=%s$'%(sum1,sum2))
                 else:
-                        pyplot.text(self.getMaxVal()-10, 10, r'$\Sigma_1=%s$'%(sum1))
+                        pyplot.text(self.getMaxVal()-20, 10, r'$\Sigma_1=%s$'%(sum1))
                 if(self.Extractor.compareMode):
                         pyplot.hist(self.focal_length2, bins, label="collection 2", alpha=0.5, color='red' )
                 pyplot.legend()
@@ -145,10 +146,10 @@ if __name__ == "__main__":
         sensor = 'ff'
 
         try:
-                print( 'ARGV      :', sys.argv[1:])
+                #print( 'ARGV      :', sys.argv[1:])
 
                 options, dirs = getopt.gnu_getopt(sys.argv[1:], 's:h', ['sensor=','help'])
-                print( 'OPTIONS   :', options)
+                #print( 'OPTIONS   :', options)
 
                 for opt, arg in options:
                         if opt in ('-s', '--sensor'):
@@ -156,7 +157,7 @@ if __name__ == "__main__":
                         elif opt in ('-h', '--help'):
                                 helpME()
                                 break
-                print( 'SENSOR    :', sensor)
+                #print( 'SENSOR    :', sensor)
                 if( len(dirs) == 0 ):
                         print("Pass a valid directory with images as an argument!")
                         helpME()
