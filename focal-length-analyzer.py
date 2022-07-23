@@ -18,17 +18,26 @@ class Extractor:
                 self.focal_length_compare = []
                 self.crop = self.getCropSize(sensor)
 
-        def getImages(self, whichpath):
-                try:
-                        return os.listdir(whichpath)
-                except FileNotFoundError:
-                        print('The given path "' + whichpath + '" does not exist!')
+        def getImages(self, whichpath, extension = ['jpg', 'tif', 'tiff']):
+                image_list = []
+                # no fuzz with suffixes: make them to lowercase
+                extension_lower = []
+                for x in extension:
+                        extension_lower.append(x.lower())
+                        
+                for dirpath, dirnames, files in os.walk(whichpath):
+                        for name in files:
+                                if extension and name.lower().endswith(tuple(extension_lower)):
+                                        image_list.append(os.path.join(dirpath, name))
+                                #elif not extension:
+                                #        print('No files with the given extensions' + extension + ' found!')
+                return image_list
 
         def extract(self):
                 # normal extraction
                 for img in self.images:
                         #print(self.images)
-                        entry = self.getExifData( Image.open(self.path + os.path.sep + img) )
+                        entry = self.getExifData( Image.open(img) )
                         if(entry):
                                 self.focal_length.append(entry)
                 print(self.focal_length)
@@ -36,7 +45,7 @@ class Extractor:
                 if(self.compareMode):
                         for img in self.compare_images:
                                 #print(self.compare_images)
-                                entry = self.getExifData( Image.open(self.compare_path + os.path.sep + img) )
+                                entry = self.getExifData( Image.open(img) )
                                 if(entry):
                                         self.focal_length_compare.append(entry)
                         print(self.focal_length_compare)
@@ -61,11 +70,15 @@ class Extractor:
                         
         def getExifData(self, img):
                 print(img.filename)
-                exif_data = {
-                        ExifTags.TAGS[k]: v
-                        for k, v in img._getexif().items()
-                        if k in ExifTags.TAGS
-                }
+                try:
+                        exif_data = {
+                                ExifTags.TAGS[k]: v
+                                for k, v in img._getexif().items()
+                                if k in ExifTags.TAGS
+                        }
+                except AttributeError:
+                        print('No exif data found for ' + img.filename + '.')
+                        return None
                 #print(exif_data)
                 #print(focal_length)
                 if(self.crop < 0): # local sensor without recalculation
