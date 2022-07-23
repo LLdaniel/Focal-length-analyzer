@@ -23,7 +23,25 @@ Feed the tool with data happens on the CLI and will bring up the final result as
 - Python 3.9.2
 
 ## Binary Build Procedure
-Will come soon.
+Currently binaries are available for *Linux* and *Windows*.
+They are created separately on each plattform with [pyinstaller](https://pypi.org/project/pyinstaller/ "pyinstaller").
+<table>
+     <tr>
+          <th columnspan="3">File</th>
+          <th>Sum sha256</th>
+          <th>Plattform</th>
+     </tr>
+     <tr>
+          <td>Focal-length-analyzer-1.0-win.zip</td>
+          <td>7e4c946bd3204f5d11442dd2ac8b0c64b444548d218c7770c93bd26cb7b96867</td>
+          <td>Windows</td>
+     </tr>
+     <tr>
+          <td>Focal-length-analyzer-1.0-linux.tar.gz</td>
+          <td>2c60d3d5b57f7c6fd94a187c80d6943906629248098f5dd9ea260ccc1107ea81</td>
+          <td>Linux</td>
+     </tr>
+</table>
 
 ## Licence
 MIT License
